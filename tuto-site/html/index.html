@@ -107,10 +107,43 @@
         <p>You can see you have valuable information about why the 404 happened, what http request triggered it and some more information about this request headers. The <span class="inline-code">docker logs</span> command gives you access to the output
             of a container. The <span class="inline-code">-f</span> option is a way to tell you want to get it continuously. We will use it in the following steps. For the moment, just to a <span class="inline-code">Ctrl-c</span> in the terminal to stop
             the docker logs display and come back to your command line.</p>
+    </section>
+    <section>
+        <h2> First steps with Nginx configuration </h2>
+        <p>Remember when we started the site about zola, we had to type specifically the zola.html file name in the url line. In this section, we will use nginx configuration to fix this.</p>
+        <h3> inside a container</h3>
+        <p>If the nginx container with the zola site is not running anymore, relaunch it with </p>
+        <p class="paragraph-code">
+            docker run -d --name zola-site -v $(pwd)/zola-site:/usr/share/nginx/html:ro -p 8082:80 nginx
+        </p>
+        <p>And then do a</p>
+        <p class="paragraph-code">
+            docker exec -ti zola-site bash
+        </p>
+        <p>This gives you access inside the container running the nginx server with the zola site. It basically tells docker you want to run the shell <span class="inline-code">bash</span> command inside the container named zola-site. The <span class="inline-code">-ti</span>            option is the way to specify you want it to be interactive, i.e be able to type commands and display their results. The command invites now looks something like <span class="inline-code">root@ffb76300f5a1:/#</span>. You are root user inside
+            your container.</p>
+        <p>Go and look for the default files.... where they are /etc/nginx/conf.d etc.</p>
+        <h3> Writing your first configuration</h3>
+        <p>Config for zola : changer l'index, regarder ou on place le fichier</p>
+        <p>relancer avec sa config </p>
+        <p class="paragraph-code">
+            $ docker run -d --name zola-site -v $(pwd)/config-dir/zola-conf:/etc/nginx/conf.d:ro -v $(pwd)/zola-site:/usr/share/nginx/html:ro -p 8082:80 nginx:official<p></p>
+        </p>
+        <h3>We can rewrite</h3>
+        <p>On fait une config tuto site et on fait le premier rewrite /$ . On lance avec cette config ca marche</p>
+        <p>On rajoute le error log en debug sur ce serveur, on fait le docker exec nginx -s reload puis docker logs -f --tail="0" et on constate qu'on a les infos sur le rewrite</p>
+        <p>On essaye page2.html ca marche pas, on fait le rewrite de html avec les regex et on voit que ca marche.</p>
 
     </section>
-
-
+    <h2> Docker networking to run multiple site </h2>
+    Proxy pass depuis un seul serveur vers google
+    Several sites on the same machine zola, recipe, on met un nginx devant dont le seul but est le proxy pass
+    Quand on veut rajouter un site, il suffit de le rajouter dans le réseau site
+    La meme chose avec des multiples adress grace à la directive server
+    <section>
+</section>
+<section>
+</section>
     <footer>
         <p> <a href="https://github.com/yvnicolas/docker-nginx-tuto"> Look at this tutorial on Github </a>
     </footer>
