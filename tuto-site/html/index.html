@@ -1,0 +1,118 @@
+<html>
+
+<head>
+
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="css/xxx.css" />
+    <title>Docker and Nginx tutorial</title>
+
+</head>
+
+
+<body>
+
+    <header>
+        <h1> Docker and Nginx Tutorial </h1>
+    </header>
+
+    <nav>
+        <h1> Menu de navigation (partie nav)</h1>
+        <ul>
+            <li> <a href="#"> Choix 1 </a></li>
+            <li> <a href="#"> Choix 2 </a></li>
+            <li> <a href="#"> Choix 3 </a></li>
+        </ul>
+    </nav>
+
+    <section>
+        <h2> Start a first web site with Nginx </h2>
+
+        <h3> Get the docker image for nginx</h3>
+        <p> Docker key concept is to organize softwares runnings on computers as independant units called containers. On a single machine (your pc or a server), you can have multiple containers which effectively behave individually as if they were independant
+            servers or machines. Containers are started by <em> running them </em>. When you first start a container, you need to specify which docker image it is derived from. A docker image is effectively a template. You can see it as an independant
+            machine on which software has been installed. Starting a docker container from this image would be equivalent to do a copy/paste from this machine and using it without messing up the machine you have copied and without the need of reinstalling
+            the softwares already installed on the first machine. And that's nice because installing new software can be long and tedious.</p>
+        <p> A second good thing is that you can take advantage of a lot of docker images that already exists and that are all stored on the <a href=https://hub.docker.com/>Docker hub web site </a>. Most of the open source software editors will actually store
+            a docker image with all what is required for their software to run. And that effectively save you the time to install the software on your machine. </p>
+        <p> That is the case for <span class="inline-code"> nginx</span>. We will first download the nginx image from the docker hub by typing in our terminal : </p>
+        <p class="paragraph-code">
+            yves@bureau-yves:~$ docker pull nginx
+        </p>
+        <h3> Run Nginx on your computer</h3>
+        <p>You can now start an nginx server on your machine by simply running : </p>
+        <p class="paragraph-code">
+            yves@bureau-yves:~$ docker run -d -p 80:80 nginx <br/> a861b5fdf6f2bd66564a9951c1b7b961d1b426cc9476fa0fa6e3cd5d1007fc66
+            <br/> yves@bureau-yves:~$ <br/>
+        </p>
+        <p>A few explanation about this command line : </p>
+        <ul>
+            <li>the <span class="inline-code">-d</span> option states that the container should be run as a daemon. Other option would be to start it as interactive.</li>
+            <li>the <span class="inline-code">-p 8080:80</span> options will give network connectivity to the outside world. It says that the network port 8080 from your machine will be mapped to the container's port 80 (remember that the container looks
+                like an independant machine and would have its own network configuration different from your machine's one)</li>
+            <li>the <span class="inline-code">nginx</span> at the end states that the container should use the nginx image (the one you just dowloaded by the docker pull command)</li>
+        </ul>
+        <p> using the docker ps command that lists all running containers, you can verify it started correctly. </p>
+        <p class="paragraph-code">
+            yves@bureau-yves:~$ docker ps<br/> CONTAINER ID IMAGE COMMAND CREATED STATUS PORTS NAMES<br/> a861b5fdf6f2 nginx "nginx -g 'daemon off" 12 minutes ago Up 12 minutes 0.0.0.0:80->80/tcp, 443/tcp sleepy_blackwell<br/> yves@bureau-yves:~$
+            <br/>
+        </p>
+        <p>You can now open your favorite browser and type http://localhost:8080 in the url line, this should look like : </p>
+        <img src="../resources/capture-empty-nginx.png" alt="Nginx welcome page">
+        <h3> Shutting down nginx</h3>
+        <p>The above page displays the default nginx welcome page. We will now change things to display our own content. Before doing that, we should remove this container to start from a fresh new installation. You can remove a container by using the docker
+            rm command with its name. Here the name has been assigned automatically and is the last info that was showing up when you did the docker ps. sleepy_blackwell was the one docker assigned to the container on my machine. It is good practice to
+            first stop the container and then removes it. I also use the -v option with the remove command that helps saves space that docker takes on your computer. I will not do it in this tutorial but encourage you to look more in depth in docker's
+            documentation to learn more about all the wonderfull things you can do with containers. Here is what I do to stop the container and remove it. Post doing it a docker ps command checks the container is not here anymore.</p>
+        <p class="paragraph-code">
+            yves@bureau-yves:~$ docker stop sleepy_blackwell <br/> sleepy_blackwell
+            <br/> yves@bureau-yves:~$ docker rm -v sleepy_blackwell <br/> sleepy_blackwell
+            <br/> yves@bureau-yves:~$ docker ps<br/> CONTAINER ID IMAGE COMMAND CREATED STATUS PORTS NAMES<br/> yves@bureau-yves:~$ <br/>
+        </p>
+    </section>
+    <section>
+        <h2> Put your own site content in Nginx </h2>
+        <h3> Tired of sleepy_blackwells and the like</h3>
+        <p> When you start a container, docker will give it a randomly chosen name built from an adjective and the name of a famous scientist. This is both usefull and funny as it is easier to use a name for container that their alphanumerical ids. We will
+            be using several containers that we will need to be able to refer to. To avoid messing up between lazy_einsteins and peaceful_permans, it is a good practice to name your docker container by using the <span class="inline-code">--name youChooseAName </span>            option in the docker run command line. We will do it subsequantly. </p>
+        <h3>Displaying your content</h3>
+        <p> Nginx is a full web sever which can serve static html site. We will illustrate this by starting the web site which is in the recipe-site directory. So make sure that your terminal is currently located at the root of this tutorial directory, ie
+            the docker-nginx-tuto directory that was created when you did a git clone and type the following command :</p>
+        <p class="paragraph-code">
+            $ docker run -d --name recipe-site -v $(pwd)/recipe-site:/usr/share/nginx/html:ro -p 8081:80 nginx
+        </p>
+        <p>You should be familiar with the <span class="inline-code">-d</span>, <span class="inline-code">--name</span> and <span class="inline-code">-p</span> options. The <span class="inline-code">-v</span> option is a volume mounting command from docker.
+            It will actually use the host directory which path is left from the first semicolon to mount it in the new container at the location which is specified on the right part of the semicolon. The final :ro part specifies that this location should
+            be read-only inside the container (but you still can modify it from your computer). On the right hand side of the semicolon <span class="inline-code">/usr/share/nginx/html</span> is the place where nginx software will look for html files to
+            be served. So when you go now in your browser and go to url <a href="http://localhost:8081">http://localhost:8081</a>, you will now see the html files that are under the recipe-site directories : </p>
+        <img src="../resources/capture-recipe.png" alt="Riz-au-lait">
+        <p>If you read french, you can now enjoy this delicious desert from Normandy that came to me from my grand-mother through my mother...</p>
+        <h3>Starting a second web site</h3>
+        <p> Remember Docker containers are isolated from each others. So we will now launch on our PC a second web site. In your terminal, type </p>
+        <p class="paragraph-code">
+            docker run -d --name zola-site -v $(pwd)/zola-site:/usr/share/nginx/html:ro -p 8082:80 nginx
+        </p>
+        <p>if you go to your browser and type <a href="http://localhost:8082">http://localhost:8082</a>, you notice that you'll get a 403 error which is because Nginx did not find any index.html file because the index site for this Zola intro site is actually
+            zola.html. If you go to the right url : <a href="http://localhost:8082/zola.html">http://localhost:8082/zola.html</a>, you will see the second site.
+        </p>
+        <h3>Looking up the accesses</h3>
+        <p> In a terminal, type </p>
+        <p class="paragraph-code">
+            $ docker logs -f recipe-site</span>
+        </p>
+        <p>Nothing happens, that's normal, then in your browser go to <a href="http://localhost:8081/noway">http://localhost:8081/noway</a>. Your browser will display a 404 and your terminal will display something like that : </p>
+        <p class="paragraph-code">
+            2016/12/18 06:44:30 [error] 7#7: *1 open() "/usr/share/nginx/html/noway" failed (2: No such file or directory), client: 172.17.0.1, server: localhost, request: "GET /noway HTTP/1.1", host: "localhost:8081" 172.17.0.1 - - [18/Dec/2016:06:44:30 +0000] "GET
+            /noway HTTP/1.1" 404 169 "-" "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:50.0) Gecko/20100101 Firefox/50.0" "-"
+        </p>
+        <p>You can see you have valuable information about why the 404 happened, what http request triggered it and some more information about this request headers. The <span class="inline-code">docker logs</span> command gives you access to the output
+            of a container. The <span class="inline-code">-f</span> option is a way to tell you want to get it continuously. We will use it in the following steps. For the moment, just to a <span class="inline-code">Ctrl-c</span> in the terminal to stop
+            the docker logs display and come back to your command line.</p>
+
+    </section>
+
+
+    <footer>
+        <p> <a href="https://github.com/yvnicolas/docker-nginx-tuto"> Look at this tutorial on Github </a>
+    </footer>
+
+</body>

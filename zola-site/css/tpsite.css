@@ -1,0 +1,212 @@
+/*******************************************************************************
+    Css style sheet designed for OpenClassRoom site creation activity
+    Part 3 Chap 5
+
+    Author : Yves Nicolas
+*******************************************************************************/
+
+
+/*******************************************************************************
+        FONTS
+        Got them from Google fonts
+        Licenced under SIL Openfont licence file (see fonts/OFL.txt)
+*******************************************************************************/
+
+/* Mogra - used for titles and special texts*/
+@font-face {
+  font-family: 'Mogra';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Mogra'), local('Mogra-Regular'), url('../fonts/Mogra.woff2') format('woff2'), url('../fonts/Mogra-Regular.ttf') format('truetype');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2212, U+2215, U+E0FF, U+EFFD, U+F000;
+}
+
+
+/* Rasa - used for main texts */
+@font-face {
+  font-family: 'Rasa';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Rasa'), local('Rasa-Regular'), url('../fonts/Rasa.woff2') format('woff2'), url('../fonts/Rasa-Regular.ttf') format('truetype');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2212, U+2215, U+E0FF, U+EFFD, U+F000;
+}
+
+
+/*******************************************************************************
+        PAGE Ggeneral parameters
+*******************************************************************************/
+
+body
+{
+    background-color: #e8d8c0;
+    font-family: "Rasa";
+    color: #422d0b;
+}
+
+#container_page {
+    width: 80%;
+    margin : auto;
+}
+
+
+h1, h2
+{
+    font-family: "Mogra";
+
+}
+
+
+/*******************************************************************************
+        Quelques éléments génériques
+*******************************************************************************/
+
+.bouton {
+    background-color:#422d0b;
+    color: white;
+    border-radius: 20px;
+    padding: 6px;
+    margin : 6px;
+    font-family: "Mogra";
+    text-decoration: none;
+}
+
+.text-input {
+    background-color: white;
+    border: 1px #422d0b solid;
+    border-radius: 20px;
+    padding: 6px;
+    margin : 6px;
+    font-family: "Mogra";
+    width : 500px;
+}
+
+.menu_en_ligne {
+    list-style: none;
+    display : flex;
+    justify-content: space-around;
+    flex-direction: row;
+}
+
+
+/*******************************************************************************
+        Mise en forme du header
+*******************************************************************************/
+
+/*Fixe sur la page avec un cadre arrondi*/
+/* Les trois éléments sont placés dans l'ordre automatiquement alignés */
+/* pour le fixe : pas trouver comment fixer dans un container flex box... */
+header {
+    border: 3px #422d0b solid;
+    padding: 20px;
+    border-radius: 20px;
+    display : flex;
+    justify-content: space-between;
+    align-items: center;
+    /*width: 80%;*/
+    height: 8%;
+    /*position: fixed;
+    top: 3px;*/
+    overflow: hidden;
+}
+
+header h1 {
+    text-align: center;
+}
+
+/* taille fixe pour la trombine d'Emile */
+header img {
+    /*width : 160px;*/
+    height: 77px;
+}
+
+
+
+/*******************************************************************************
+        Mise en forme de la section de recherche
+*******************************************************************************/
+.selection {
+    border: 3px #422d0b solid;
+    padding: 20px;
+    margin-top: 5px;
+    border-radius: 20px;
+    display : flex;
+    justify-content: space-between;
+    align-items: center;
+    /*width: 80%;*/
+    height: 8%;
+    /*position: fixed;
+    top: 3px;*/
+
+}
+
+.rechercher {
+    display : flex;
+    flex-direction: row;
+    justify-content:flex-start;
+    overflow: hidden;
+
+}
+
+
+
+/* taille fixe pour toutes les vignettes */
+.selection img {
+    height: 77px;
+    margin : 6px;
+
+}
+
+/*******************************************************************************
+        Mise en forme de la section de lecture
+*******************************************************************************/
+
+.lecture {
+    text-align: justify;
+    display : flex;
+    flex-direction: row;
+}
+
+.lecture aside {
+    flex: 1;
+    padding:20px;
+}
+.lecture figure {
+    text-align: center;
+}
+.lecture img{
+    height: 250px;
+}
+
+.lecture article {
+    flex: 3;
+    padding:20px;
+
+}
+
+/*******************************************************************************
+        Mise en forme du footer
+*******************************************************************************/
+footer {
+    border: 3px #422d0b solid;
+    height: 97px;
+    /*padding: 20px;*/
+    border-radius: 20px;
+    background: url('../ressources/zola.jpeg') repeat;
+    position: relative;
+    overflow: hidden;
+}
+
+footer ul {
+    height: 30px;
+    width: 100%;
+    background-color: rgba(66, 40, 11, 0.7);
+    position: absolute;
+    bottom:  0;
+    padding: 0;
+    margin: 0;
+    list-style: none;
+    display : flex;
+    justify-content: flex-end;
+    align-items: center;
+    flex-direction: row;
+}
